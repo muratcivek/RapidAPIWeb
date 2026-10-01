@@ -1,0 +1,94 @@
+﻿@model List<RapidAPIWeb.Models.ImdbMoviesViewModel>
+@{
+    ViewData["Title"] = "IMDb Top 100 Filmler";
+}
+
+<div class="container mt-4">
+
+    <div class="text-center mb-4">
+        <h2>IMDb Top 100 Filmler</h2>
+        <p class="text-muted">IMDb'nin en yüksek puanlı filmleri</p>
+    </div>
+
+    @if (Model == null || !Model.Any())
+    {
+        <div class="alert alert-warning">
+            Film bulunamadı.
+        </div>
+    }
+    else
+    {
+        <div class="row">
+
+            @foreach (var movie in Model)
+            {
+                <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+
+                    <div class="card h-100 shadow-sm">
+
+                        <img src="@movie.image"
+                             class="card-img-top"
+                             alt="@movie.title"
+                             style="height: 380px; object-fit: cover;" />
+
+                        <div class="card-body d-flex flex-column">
+
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="badge bg-dark">
+                                    #@movie.rank
+                                </span>
+
+                                <span class="badge bg-warning text-dark">
+                                    ⭐ @movie.rating
+                                </span>
+                            </div>
+
+                            <h5 class="card-title">
+                                @movie.title
+                            </h5>
+
+                            <p class="text-muted mb-2">
+                                @movie.year
+                            </p>
+
+                            @if (movie.genre != null)
+                            {
+                                <div class="mb-3">
+                                    @foreach (var genre in movie.genre)
+                                    {
+                                        <span class="badge bg-secondary me-1">
+                                            @genre
+                                        </span>
+                                    }
+                                </div>
+                            }
+
+                            <p class="card-text">
+                                @if (!string.IsNullOrEmpty(movie.description))
+                                {
+                                    @(movie.description.Length > 120
+                                        ? movie.description.Substring(0, 120) + "..."
+                                        : movie.description)
+                                }
+                            </p>
+
+                            <div class="mt-auto">
+                                <a href="@movie.imdb_link"
+                                   target="_blank"
+                                   rel="noopener noreferrer"
+                                   class="btn btn-warning w-100">
+                                    IMDb'de Gör
+                                </a>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            }
+
+        </div>
+    }
+
+</div>
